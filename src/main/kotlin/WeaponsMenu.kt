@@ -14,6 +14,9 @@ fun weaponMenu() {
             3. Insertar nueva arma
             4. Actualizar arma
             5. Eliminar arma
+            6. Añadir mod a un arma
+            7. Mostrar las mods de un arma
+            8. Eliminar mod de un arma
             0. Salir
             =================================
             Elige una opción:
@@ -112,6 +115,47 @@ fun weaponMenu() {
                 val id = scanner.nextLine().toIntOrNull()
                 if (id != null) WeaponsDAO.eliminarArma(id)
                 else println("ID inválido.")
+            }
+
+            6 -> {
+                println("=== Asignar Mod a Arma ===")
+                print("ID del arma: ")
+                val wid = scanner.nextLine().toIntOrNull()
+                print("ID del mod: ")
+                val mid = scanner.nextLine().toIntOrNull()
+
+                if (wid != null && mid != null)
+                    WeaponModsDAO.asignarModAWeapon(wid, mid)
+                else
+                    println("ID inválido.")
+            }
+
+            7 -> {
+                println("=== Listar Mods de un Arma ===")
+                print("Ingrese el ID del arma: ")
+                val wid = scanner.nextLine().toIntOrNull()
+                if (wid != null) {
+                    val mods = WeaponModsDAO.listarModsDeWeapon(wid)
+                    if (mods.isEmpty()) {
+                        println("Esta arma no tiene mods asignados.")
+                    } else {
+                        println("Mods del arma con id=$wid:")
+                        mods.forEach {
+                            println("[${it.mod_id}] ${it.name} | Cost: ${it.capacity_cost} | Polarity: ${it.polarity} | Rarity: ${it.rarity}")
+                        }
+                    }
+                } else println("ID inválido.")
+            }
+
+            8 -> {
+                println("=== Quitar Mod de un Arma ===")
+                print("Ingrese el ID del arma: ")
+                val wid = scanner.nextLine().toIntOrNull()
+                print("Ingrese el ID del mod: ")
+                val mid = scanner.nextLine().toIntOrNull()
+                if (wid != null && mid != null)
+                    WeaponModsDAO.eliminarRelacion(wid, mid)
+                else println("IDs inválidos.")
             }
 
             0 -> println("Saliendo del menú...")
